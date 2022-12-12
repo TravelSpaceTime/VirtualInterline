@@ -8,8 +8,12 @@
 [0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline[0m
 [0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Analysis[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Analysis[0m
-[0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Analysis/GraphAnalysis.class[0m
-[0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Analysis/GraphAnalysis.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Analysis/OnDconnectionAnalysis$$typecreator1$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Analysis/OnDconnectionAnalysis$$typecreator1$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Analysis/OnDconnectionAnalysis.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Analysis/OnDconnectionAnalysis.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Analysis/OnDconnectionAnalysis$$typecreator2$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Analysis/OnDconnectionAnalysis$$typecreator2$1.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Integration[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Integration[0m
 [0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Integration/ReadData.class[0m
@@ -26,4 +30,8 @@
 [0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Integration/SparkConfiguration$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Integration/ReadData$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Integration/ReadData$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Integration/WriteData.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Integration/WriteData.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	com/travelport/virtualinterline/Integration/WriteData$.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /Users/shrikanth.mysore/Documents/GitProjects/VirtualInterline/target/scala-2.12/classes/com/travelport/virtualinterline/Integration/WriteData$.class[0m
 [0m[[0m[0mdebug[0m] [0m[0mDone packaging.[0m
