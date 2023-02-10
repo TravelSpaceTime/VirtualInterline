@@ -1,13 +1,13 @@
 package com.travelport.virtualinterline.Integration
 
 import com.travelport.virtualinterline.Analysis.OnDconnectionAnalysis
-import org.apache.spark.sql.functions.{col, udf}
+import org.apache.spark.sql.functions.{col, regexp_replace, udf}
 
 object TheMain extends App{
 
   val t1 = System.nanoTime
 
-  val logData = "/Users/shrikanth.mysore/Downloads/eStreaming15/matched_encoded_v1_5_cut301_20220820/*.parquet"
+  val logData = "/Users/shrikanth.mysore/Downloads/TPData/eStreaming15S3//lkndhppnas2130v-2023020900000456-58118.snappy.parquet"
   val csvSaveLocation = "/Users/shrikanth.mysore/Downloads/AvailabilityData/SavedResults/"
   val spark = SparkConfiguration.sparkSqlConfig()
 
@@ -16,11 +16,14 @@ object TheMain extends App{
   val rdf = ReadData.readParquet(spark,logData)
   rdf.show(1,false)
 
-  val ondV = new OnDconnectionAnalysis()
-  val ovdDF = ondV.outOViaToD(spark,rdf)
-  val arrVal = ondV.viaAirportsAsOnD(spark,ovdDF)
-  val tupleDF = ondV.pairwiseAirports(spark, arrVal)
-  tupleDF.show(10,false)
+  val oda = new OnDconnectionAnalysis()
+  val ovdDF = oda.outOViaToD(spark,rdf)
+  val arrVal = oda.viaAirportsAsOnD(spark,ovdDF)
+  val tupleDF = oda.pairwiseAirports(spark, arrVal)
+  val expDF = oda.pairwiseAirportsExploded(spark,tupleDF)
+  expDF.show(10,false)
+  val selOND = expDF.select("pwOnD").distinct()
+  selOND.show(100,false)
 
 
 
