@@ -22,8 +22,8 @@ class OnDconnectionAnalysis {
   def outOViaToD(spark: SparkSession, routesDF: DataFrame):DataFrame = {
     import spark.implicits._
 
-    val groupByColumns = Seq("outOriginCity","outDestinationCity","outOriginAirport","outDestinationAirport"
-      ,"outNumStops", "outOperatingCxr", "outViaAirports")
+    val groupByColumns = Seq("out_origin_city","out_destination_city","out_origin_airport","out_destination_airport"
+      ,"out_num_stops", "out_operating_cxr", "out_via_airports")
 
     val columns = Seq("out_origin_city", "in_origin_city", "out_segments", "currency", "out_baggage", "out_brand_id", "out_equipments"
       , "out_origin_airport", "out_seats", "out_arrival_date", "out_arrival_time", "out_cabin_class", "out_durations", "out_layovers"
@@ -57,10 +57,10 @@ class OnDconnectionAnalysis {
 
     val ccODViaA = ovdDF.withColumn("concatOnDVia"
       , concat_ws(","
-        ,col("outOriginCity")
-        ,col("outViaAirports")
-        ,regexp_replace(col("outViaAirports"),"[| ]",",")
-        ,col("outDestinationCity")
+        ,col("out_origin_city")
+        ,col("out_via_airports")
+        //,regexp_replace(col("out_via_airports"),"|",",")
+        ,col("out_destination_city")
       )
     )
 
