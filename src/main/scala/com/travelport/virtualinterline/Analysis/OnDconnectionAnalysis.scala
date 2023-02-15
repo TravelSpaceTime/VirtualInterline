@@ -25,7 +25,7 @@ class OnDconnectionAnalysis {
     val groupByColumns = Seq("out_origin_city","out_destination_city","out_origin_airport","out_destination_airport"
       ,"out_num_stops", "out_operating_cxr", "out_via_airports")
 
-    val columns = Seq("out_origin_city", "in_origin_city", "out_segments", "currency", "out_baggage", "out_brand_id", "out_equipments"
+    val supersetOfColumnsToUseAbove = Seq("out_origin_city", "in_origin_city", "out_segments", "currency", "out_baggage", "out_brand_id", "out_equipments"
       , "out_origin_airport", "out_seats", "out_arrival_date", "out_arrival_time", "out_cabin_class", "out_durations", "out_layovers"
       , "out_num_stops", "out_refund_rule", "out_stop_over", "out_via_airports", "pos_city", "group_id", "in_brand_id", "in_origin_airport"
       , "in_seats", "in_segments", "out_arrival_epoc", "out_destination_city", "out_fare_types", "out_marketing_cxr", "out_operating_cxr"
@@ -46,6 +46,7 @@ class OnDconnectionAnalysis {
       , "in_codeshare_operating_flight", "out_codeshare_operating_carrier", "in_codeshare_operating_carrier"
       , "in_incidental_stop_departure", "out_availability_connection_indicator", "in_availability_connection_indicator"
     )
+
     val odv = routesDF.select(groupByColumns.map(c => col(c.toString())): _*
     ).groupBy(groupByColumns.map(c => col(c.toString())): _*).count()
 
@@ -59,15 +60,12 @@ class OnDconnectionAnalysis {
       , concat_ws(","
         ,col("out_origin_city")
         ,col("out_via_airports")
-        //,regexp_replace(col("out_via_airports"),"|",",")
         ,col("out_destination_city")
       )
     )
 
     val regex_delimiter = ","
     val ccToArr = ccODViaA.withColumn("arrOfOnDs", split(col( "concatOnDVia") , regex_delimiter))
-
-
 
     ccToArr
   }
