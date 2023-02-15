@@ -22,8 +22,9 @@ class OnDconnectionAnalysis {
   def outOViaToD(spark: SparkSession, routesDF: DataFrame):DataFrame = {
     import spark.implicits._
 
-    val groupByColumns = Seq("out_origin_city","out_destination_city","out_origin_airport","out_destination_airport"
-      ,"out_num_stops", "out_operating_cxr", "out_via_airports")
+    val groupByColumns = Seq("out_origin_city","out_destination_city","out_origin_airport","out_via_airports","out_destination_airport"
+      ,"out_num_stops", "out_operating_cxr" )
+    // Have to put in this order ("out_origin_airport","out_via_airports","out_destination_airport") Via between the origin and destination for the concat to provide the correct sequence
 
     val supersetOfColumnsToUseAbove = Seq("out_origin_city", "in_origin_city", "out_segments", "currency", "out_baggage", "out_brand_id", "out_equipments"
       , "out_origin_airport", "out_seats", "out_arrival_date", "out_arrival_time", "out_cabin_class", "out_durations", "out_layovers"
@@ -58,9 +59,9 @@ class OnDconnectionAnalysis {
 
     val ccODViaA = ovdDF.withColumn("concatOnDVia"
       , concat_ws(","
-        ,col("out_origin_city")
-        ,col("out_via_airports")
-        ,col("out_destination_city")
+        ,col("out_origin_airport")
+        ,col("out_via_airports") // Have to put this in between the origin and destination for the concat to provide the correct sequence
+        ,col("out_destination_airport")
       )
     )
 
@@ -87,8 +88,9 @@ class OnDconnectionAnalysis {
   def pairwiseAirportsExploded(spark: SparkSession, arrVal: DataFrame):DataFrame ={
     import spark.implicits._
     val explodedDF = arrVal.withColumn("pwOnD",explode_outer($"ncol"))
-    //val explodedDF =  arrVal.select(explode_outer($"ncol")).as("explodedPairOnD").distinct
     explodedDF
   }
+
+
 
 }
