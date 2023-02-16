@@ -71,14 +71,8 @@ val columns = Seq([out_origin_city, in_origin_city, out_segments, currency, out_
 
   pwOND.show(10, false)
 
-  val skewJoined = expDF.join(
-    broadcast(pwOND),
-    (pwOND.col("pwOrigin") ===expDF.col("out_origin_airport"))
-      && (pwOND.col("pwDest") === expDF.col("out_destination_airport"))
-  )
-
+  val skewJoined = oda.pairwiseAirportsJoinedToShopResponsesCounts(spark, ovdDF, pwOND)
   skewJoined.show(10, false)
-
 
   spark.stop()
   val duration = (System.nanoTime - t1) / 1e9d

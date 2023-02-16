@@ -2,7 +2,8 @@ package com.travelport.virtualinterline.Analysis
 
 
 
-import org.apache.spark.sql.functions.{col, concat, concat_ws, desc, explode_outer, lit, regexp_replace, split, udf}
+import com.travelport.virtualinterline.Integration.TheMain.{ovdDF, pwOND}
+import org.apache.spark.sql.functions.{broadcast, col, concat, concat_ws, desc, explode_outer, lit, regexp_replace, split, udf}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 class OnDconnectionAnalysis {
@@ -91,6 +92,17 @@ class OnDconnectionAnalysis {
     explodedDF
   }
 
+  def pairwiseAirportsJoinedToShopResponsesCounts(spark: SparkSession, ovdDF: DataFrame, pwOND: DataFrame):DataFrame = {
+
+    import spark.implicits._
+    val skewJoined = ovdDF.join(
+      broadcast(pwOND),
+      (pwOND.col("pwOrigin") ===ovdDF.col("out_origin_airport"))
+        && (pwOND.col("pwDest") === ovdDF.col("out_destination_airport"))
+    ).sort($"out_num_stops".desc)
+
+    skewJoined
+  }
 
 
 }
