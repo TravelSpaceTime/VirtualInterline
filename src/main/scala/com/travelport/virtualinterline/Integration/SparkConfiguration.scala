@@ -1,6 +1,6 @@
 package com.travelport.virtualinterline.Integration
 
-import com.travelport.virtualinterline.Analysis.OnDconnectionAnalysis
+import com.travelport.virtualinterline.Analysis.{OnDconnectionAnalysis, eStreamingData}
 import org.apache.spark.sql.SparkSession
 
 object SparkConfiguration {
@@ -23,7 +23,7 @@ object SparkConfiguration {
       .getOrCreate()
 
     val conf = spark.sparkContext
-    conf.getConf.registerKryoClasses(Array(classOf[OnDconnectionAnalysis]))
+    conf.getConf.registerKryoClasses(Array(classOf[ReadData], classOf[OnDconnectionAnalysis]))
     conf.setLogLevel("ERROR")
 
     spark
