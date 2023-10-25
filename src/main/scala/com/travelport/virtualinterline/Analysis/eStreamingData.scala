@@ -2,7 +2,7 @@ package com.travelport.virtualinterline.Analysis
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
-object eStreamingData {
+class eStreamingData {
   /*
 
 |id              |group_id|originalRequest             |shop_req_timeStamp
@@ -26,16 +26,17 @@ object eStreamingData {
 |in_remaining_seats|in_brand_id|in_codeshare_operating_carrier|in_codeshare_operating_flight|in_via_airports|in_num_stops|
 
    */
-  def collectAirportAirline(spark: SparkSession, logData:DataFrame):DataFrame={
+  def collectOutAirportAirline(spark: SparkSession, logData:DataFrame):DataFrame={
     import spark.implicits._
     val shortlistAttributes = logData.select(
       "out_origin_city"
-      /*, "out_destination_city","out_via_airports"
-      ,"out_marketing_cxr","out_operating_cxr"
-      ,"out_num_stops","in_origin_airport","in_destination_airport",
-    "in_marketing_cxr","in_operating_cxr","in_via_airports","in_num_stops"
-         */
+       ,"out_via_airports","out_destination_city"
+      //,"out_marketing_cxr","out_operating_cxr"
+      //,"out_num_stops","in_origin_airport","in_destination_airport"
+      //, "in_marketing_cxr","in_operating_cxr","in_via_airports","in_num_stops"
+
     )
+    
 
 
     shortlistAttributes

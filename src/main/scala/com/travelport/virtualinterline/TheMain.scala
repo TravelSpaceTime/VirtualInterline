@@ -2,7 +2,7 @@ package com.travelport.virtualinterline
 
 
 import com.travelport.virtualinterline.Analysis.eStreamingData
-import com.travelport.virtualinterline.Integration.{ReadData, SparkConfiguration}
+import com.travelport.virtualinterline.Integration.{CreateNodesEdgesWeights, ReadData, SparkConfiguration}
 
 
 
@@ -13,29 +13,22 @@ object TheMain extends App {
   val midtData = "/Users/shrikanth.mysore/Downloads/TPData/midtItin/"
   val csvSaveLocation = "/Users/shrikanth.mysore/Downloads/AvailabilityData/SavedResults/"
   val currencyConverterFIleLocation = "/Users/shrikanth.mysore/Downloads/TPData/currencyConvertedTable.csv"
-  val EStreamingLogFileLocation = "/Users/shrikanth.mysore/Downloads/TPData/eStreaming15S3/*.parquet"
+  val EStreamingLogFileLocation = "/Users/shrikanth.mysore/Downloads/TPData/eStreaming15S3/lkndhppnas2900v-2023020900004023-38401.snappy.parquet"
 
   val spark = SparkConfiguration.sparkSqlConfig()
   import spark.implicits._
 
   val rdf = new ReadData
 
-  val currencyConverter = rdf.readTPcurrencyCSV(spark, currencyConverterFIleLocation)
-  currencyConverter.show(10,false)
-
   val logEStrParquetDF = rdf.readParquet(spark, EStreamingLogFileLocation)
-  logEStrParquetDF.printSchema()
-  logEStrParquetDF.show(2,false)
 
-  val midtDF = rdf.readParquet(spark, midtData)
-  midtDF.printSchema()
-  midtDF.show(2, false)
+  val esdf = new eStreamingData
 
- // val esdf = new eStreamingData
+  val shortListAttributes = esdf.collectOutAirportAirline(spark, logEStrParquetDF)
+ // shortListAttributes.distinct().show(10,false)
 
-  val shortListAttributes = eStreamingData.collectAirportAirline(spark, logEStrParquetDF)
-  shortListAttributes.distinct().show(10,false)
-
+  val df2 = CreateNodesEdgesWeights.createNodes(spark,shortListAttributes)
+  df2.distinct.show(10,false)
 
   spark.stop()
   val duration = (System.nanoTime - t1) / 1e9d
