@@ -1,7 +1,7 @@
 package com.travelport.virtualinterline.Integration
 
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{Column, DataFrame, SparkSession}
 
 object CreateNodesEdgesWeights {
   def createAirportNodes(spark: SparkSession, AirportCombo: DataFrame): DataFrame = {
@@ -18,6 +18,14 @@ object CreateNodesEdgesWeights {
 
 
 
+  // Function to create a UDF for sliding tuples
+  def createSlidingTupleUDF(n: Int) = udf { (value: Array[String]) =>
+    value.sliding(n).collect { case arr if arr.length == n => arr }.toList
+  }
+
+  // Function to apply the UDF and add a new column to the DataFrame
+  def applySlidingTupleUDF(df: DataFrame, colName: String, udf: Column) =
+    df.withColumn(colName, udf(col(colName)))
 
   def createEdges(spark: SparkSession, df2: DataFrame): DataFrame = {
 

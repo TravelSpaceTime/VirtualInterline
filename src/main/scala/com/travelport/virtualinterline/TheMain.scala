@@ -2,6 +2,8 @@ package com.travelport.virtualinterline
 
 
 import com.travelport.virtualinterline.Analysis.eStreamingData
+import com.travelport.virtualinterline.Integration.CreateNodesEdgesWeights.{applySlidingTupleUDF, createSlidingTupleUDF}
+import org.apache.spark.sql.functions
 //import com.travelport.virtualinterline.Integration.CreateNodesEdgesWeights.generateCombinationsWithMinLength
 import com.travelport.virtualinterline.Integration.{CreateNodesEdgesWeights, ReadData, SparkConfiguration}
 
@@ -29,54 +31,29 @@ object TheMain extends App {
   val esdf = new eStreamingData
 
   val shortListAttributes = esdf.collectOutAirportAirline(spark, logEStrParquetDF)
- // shortListAttributes.distinct().show(10,false)
-
   val df2 = CreateNodesEdgesWeights.createAirportNodes(spark,shortListAttributes)
-  df2.distinct.show(10,false)
-
-
 
   val slidingTupleUDF = udf((value: Array[String]) => {value.sliding(2).map { case Array(a, b) => (a, b) }.toList})
-  val odTuple2  = df2.withColumn("alp", slidingTupleUDF($"Airport_ondVia"))
-  odTuple2.show(10,false)
-
   val slidingTupleUDF3 = udf((value: Array[String]) => {value.sliding(3).map { case Array(a, b,c) => (a, b,c) }.toList})
-  val odTuple3  = odTuple2.withColumn("alp2", slidingTupleUDF3($"Airport_ondVia"))
-  odTuple3.filter(col("out_num_stops") === 2).show(10,false)
+  val odTuple4  = df2.withColumn("alp", slidingTupleUDF($"Airport_ondVia"))
+    .withColumn("alp2", slidingTupleUDF3($"Airport_ondVia"))
 
-  /*
-  import org.apache.spark.sql.SparkSession
+ // odTuple4.filter(col("out_num_stops") === 1).show(10,false)
+  //odTuple4.filter(col("out_num_stops") === 2).show(10,false)
+  //odTuple4.filter(col("out_num_stops") === 3).show(10,false)
 
-val spark = SparkSession.builder()
-  .appName("LeastCostPath")
-  .getOrCreate()
+  val explodedDf = odTuple4.withColumn("exploded_data_alp", functions.explode(col("alp")))
+    .withColumn("exploded_data_alp2", functions.explode(col("alp2")))
+  .withColumn("combinedListcxrAirport",
+    functions.arrays_zip(col("out_marketing_cxr"), col("alp")))
+  //val resultDf = explodedDf.select("id", "exploded_data._1", "exploded_data._2")
 
-import org.apache.spark.sql.DataFrame
+  explodedDf.filter(col("out_num_stops") === 3).show(10,false)
 
-val vertices: DataFrame = Seq(
-  (1, "A"),
-  (2, "B"),
-  (3, "C"),
-  (4, "D"),
-  (5, "E")
-).toDF("id", "name")
+  val paths = explodedDf.select("out_origin_city","out_via_airports","out_destination_city"
+    ,"out_marketing_cxr","out_num_stops","exploded_data_alp","exploded_data_alp2","combinedListcxrAirport")
+  paths.filter(col("out_num_stops") === 3).show(10,false)
 
-val edges: DataFrame = Seq(
-  (1, 2, 1), // (source, target, cost)
-  (2, 3, 2),
-  (3, 4, 3),
-  (4, 5, 4),
-  (1, 3, 5)
-).toDF("src", "dst", "cost")
-
-import org.graphframes.GraphFrame
-
-val graph = GraphFrame(vertices, edges)
-
-val results = graph.shortestPaths.landmarks(Seq("A")).run()
-results.show()
-
-   */
   spark.stop()
   val duration = (System.nanoTime - t1) / 1e9d
   println("\n\ntotal Execution Time : " + duration + " in seconds\n\n")
