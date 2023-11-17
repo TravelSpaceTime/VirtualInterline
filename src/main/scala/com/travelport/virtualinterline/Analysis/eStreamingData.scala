@@ -31,15 +31,19 @@ class eStreamingData {
     val shortlistAttributes = logData.select(
       "out_origin_city"
        ,"out_via_airports","out_destination_city"
-      ,"out_marketing_cxr","out_num_stops"
-      //,"in_origin_airport","in_destination_airport"
-      //, "in_marketing_cxr","in_operating_cxr","in_via_airports","in_num_stops"
-
+      ,"validating_cxr","out_marketing_cxr","out_num_stops","currency","fare"
     )
-
-
-
     shortlistAttributes
   }
+  def collectAirlinesForPaths(spark: SparkSession, logData:DataFrame):DataFrame={
+    import spark.implicits._
+    val shortlistAttributes = logData.select(
+      "out_origin_city"
+      ,"out_via_airports","out_destination_city"
+      ,"validating_cxr","out_marketing_cxr","out_num_stops","currency","fare"
+    )
+    shortlistAttributes
+  }
+
 
 }
